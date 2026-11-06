@@ -1,0 +1,2644 @@
+{
+  "$id": "itemsadder://schema/itemsadder-plugin-config-modern",
+  "title": "ItemsAdder config.yml",
+  "markdownDescription": "ItemsAdder 4.0.19+ config.yml. Detected by `pack_delivery.uuid`.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "config_version": {
+      "type": "integer",
+      "default": 1,
+      "markdownDescription": "(default: `1`) Managed automatically. Do not change this version."
+    },
+    "metrics": {
+      "type": "boolean",
+      "default": true,
+      "markdownDescription": "(default: `true`)"
+    },
+    "update_checker": {
+      "type": "boolean",
+      "default": true,
+      "markdownDescription": "(default: `true`) Requires a server restart to start a new update check."
+    },
+    "config_files": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "lang": {
+          "type": "string",
+          "default": "en",
+          "markdownDescription": "(default: `en`) Language file name used for ItemsAdder commands, messages, and GUIs."
+        },
+        "dictionaries_lang": {
+          "type": "string",
+          "default": "en",
+          "markdownDescription": "(default: `en`)"
+        }
+      },
+      "markdownDescription": "Language and config loading options. `lang` controls plugin messages, while `dictionaries-lang` controls ItemsAdder dictionary text. [Docs](https://itemsadder.devs.beer/plugin-usage/plugin-configuration/languages)"
+    },
+    "pack_hosting": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "method": {
+          "type": "string",
+          "default": "simple_self_host",
+          "enum": [
+            "none",
+            "simple_self_host",
+            "self_host",
+            "external_host",
+            "lobfile",
+            "auto_external_legacy"
+          ],
+          "markdownDescription": "(default: `simple_self_host`)"
+        },
+        "protection": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "max_concurrent_downloads_per_ip": {
+              "type": "integer",
+              "default": 5,
+              "markdownDescription": "(default: `5`)"
+            },
+            "max_speed_mib_per_second": {
+              "type": "integer",
+              "default": 30,
+              "minimum": 1,
+              "markdownDescription": "(default: `30`) Per download, in MiB/s (1024 x 1024 bytes). Must be greater than zero."
+            },
+            "require_minecraft_headers": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`) Checks Minecraft HTTP headers; does not authenticate the client."
+            },
+            "rate_limit": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "max_requests": {
+                  "type": "integer",
+                  "default": 10,
+                  "markdownDescription": "(default: `10`) Requests per IP, shared by all players behind that address."
+                },
+                "period_seconds": {
+                  "type": "integer",
+                  "default": 2,
+                  "markdownDescription": "(default: `2`)"
+                },
+                "cooldown": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true,
+                      "markdownDescription": "(default: `true`)"
+                    },
+                    "after_rejections": {
+                      "type": "integer",
+                      "default": 5,
+                      "markdownDescription": "(default: `5`) Rejected requests before a temporary block; requests during the block do not extend it."
+                    },
+                    "duration_minutes": {
+                      "type": "integer",
+                      "default": 30,
+                      "markdownDescription": "(default: `30`)"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "markdownDescription": "Shared by self_host and simple_self_host. Provider protection overrides take precedence."
+        },
+        "simple_self_host": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "server_address": {
+              "type": "string",
+              "default": "auto",
+              "markdownDescription": "(default: `auto`)"
+            },
+            "protection": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "max_concurrent_downloads_per_ip": {
+                  "type": "integer",
+                  "default": 5,
+                  "markdownDescription": "(default: `5`)"
+                },
+                "max_speed_mib_per_second": {
+                  "type": "integer",
+                  "default": 30,
+                  "minimum": 1,
+                  "markdownDescription": "(default: `30`)"
+                },
+                "require_minecraft_headers": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "rate_limit": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true,
+                      "markdownDescription": "(default: `true`)"
+                    },
+                    "max_requests": {
+                      "type": "integer",
+                      "default": 10,
+                      "markdownDescription": "(default: `10`)"
+                    },
+                    "period_seconds": {
+                      "type": "integer",
+                      "default": 2,
+                      "markdownDescription": "(default: `2`)"
+                    },
+                    "cooldown": {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "default": true,
+                          "markdownDescription": "(default: `true`)"
+                        },
+                        "after_rejections": {
+                          "type": "integer",
+                          "default": 5,
+                          "markdownDescription": "(default: `5`)"
+                        },
+                        "duration_minutes": {
+                          "type": "integer",
+                          "default": 30,
+                          "markdownDescription": "(default: `30`)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "self_host": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "server_ip": {
+              "type": "string",
+              "default": "127.0.0.1",
+              "markdownDescription": "(default: `127.0.0.1`)"
+            },
+            "pack_port": {
+              "type": "integer",
+              "default": 8163,
+              "minimum": 1,
+              "maximum": 65535,
+              "markdownDescription": "(default: `8163`)"
+            },
+            "append_port": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "protection": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "max_concurrent_downloads_per_ip": {
+                  "type": "integer",
+                  "default": 5,
+                  "markdownDescription": "(default: `5`)"
+                },
+                "max_speed_mib_per_second": {
+                  "type": "integer",
+                  "default": 30,
+                  "minimum": 1,
+                  "markdownDescription": "(default: `30`)"
+                },
+                "require_minecraft_headers": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "rate_limit": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true,
+                      "markdownDescription": "(default: `true`)"
+                    },
+                    "max_requests": {
+                      "type": "integer",
+                      "default": 10,
+                      "markdownDescription": "(default: `10`)"
+                    },
+                    "period_seconds": {
+                      "type": "integer",
+                      "default": 2,
+                      "markdownDescription": "(default: `2`)"
+                    },
+                    "cooldown": {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "default": true,
+                          "markdownDescription": "(default: `true`)"
+                        },
+                        "after_rejections": {
+                          "type": "integer",
+                          "default": 5,
+                          "markdownDescription": "(default: `5`)"
+                        },
+                        "duration_minutes": {
+                          "type": "integer",
+                          "default": 30,
+                          "markdownDescription": "(default: `30`)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "external_host": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "url": {
+              "type": "string",
+              "default": "",
+              "markdownDescription": "(default: `\"\"`)"
+            },
+            "skip_url_file_type_check": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        }
+      },
+      "markdownDescription": "Reload with /iareload. External hosting still requires publishing the ZIP. none, simple_self_host, self_host, external_host, lobfile, auto_external_legacy To use LobFile, set method: lobfile. Its API key remains in secret.yml."
+    },
+    "resource_pack": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "extract_internal_utility_assets": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "obfuscation": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "zip_entries": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "zip_archive": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "png": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "short_texture_references": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "json": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "compress": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "png": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "compress": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "shaders": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "compress": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "validate": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "sounds": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "compress": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "quality_percent": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1,
+              "maximum": 100,
+              "markdownDescription": "(default: `100`) 1-100. 100 uses the encoder default bitrate; it is not lossless."
+            }
+          }
+        },
+        "font_images": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "optimize_using_sheets": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Combine small font images into sheets to reduce client pack loading CPU. Vanilla item glyphs use the server's Minecraft version, downloaded once from Mojang and cached. Disable if another resource pack must override the individual font textures."
+        },
+        "models": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "merge_item_definitions": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "fix_1_21_11_plus_atlas_items_models": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "force_fix_models": {
+                  "type": "array",
+                  "items": {},
+                  "markdownDescription": "Usually unnecessary. Fallback for models not found by automatic detection. List vanilla material names (e.g. paper), not model file paths."
+                }
+              }
+            },
+            "fix_dark_in_inventory": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "fix_missing_particle": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Opt-in: merge compatible external item definitions for supported 1.21.4+ clients. IA uses its assigned integer CMDs; external rules remain active for other values. Conflicting/unsupported definitions are left at their existing precedence with a warning."
+        },
+        "custom_blocks": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "note": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "chorus": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "mushroom": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "wire": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "entity": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "fire": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "use_block_material_in_inventory": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`) Uses vanilla block items for REAL, REAL_NOTE and REAL_TRANSPARENT. Existing PAPER items are converted when accessed; disabling does not reverse conversion."
+            }
+          }
+        },
+        "custom_entities": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "emotes": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "1_21_4_plus_modern_method": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "1_21_5_to_1_21_9_shaders": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "1_21_4_lower_legacy_shaders": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            }
+          }
+        },
+        "custom_armors_shaders_legacy": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "vanilla": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "overwrite_leather_layers": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "generate_shader": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "1_21_4_lower": {
+                      "type": "boolean",
+                      "default": true,
+                      "markdownDescription": "(default: `true`)"
+                    },
+                    "1_21_5_plus": {
+                      "type": "boolean",
+                      "default": true,
+                      "markdownDescription": "(default: `true`)"
+                    }
+                  }
+                }
+              }
+            },
+            "generate_optifine_cit_1_20_4_lower": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "custom_block_sounds": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "non_step": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "step": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Generates the pack patch and enables its matching server-side sound handling."
+        },
+        "font": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "mode": {
+              "type": "string",
+              "default": "vanilla",
+              "enum": [
+                "vanilla",
+                "thin",
+                "custom"
+              ],
+              "markdownDescription": "(default: `vanilla`) vanilla, thin, custom"
+            },
+            "custom": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "ipaexg.ttf",
+                  "markdownDescription": "(default: `ipaexg.ttf`)"
+                },
+                "oversample": {
+                  "type": "number",
+                  "default": 2,
+                  "markdownDescription": "(default: `2`)"
+                },
+                "shift": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "size": {
+                  "type": "number",
+                  "default": 11,
+                  "markdownDescription": "(default: `11`)"
+                }
+              }
+            }
+          },
+          "markdownDescription": "Set to false to disable font replacement without affecting font images."
+        },
+        "text_effects": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "legacy_colors_compatibility": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "scoreboard": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "hide_numbers_old_clients": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          },
+          "markdownDescription": "Shader fallback for old clients; requires /iazip and the updated pack."
+        },
+        "enable_font_images_with_force_unicode": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`) Allows font images to work when Force Unicode Font is enabled in the client."
+        },
+        "auto_fix_pre_1_21_2_shaders": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "custom_model_data_starting_value": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "ALL": {
+              "type": "integer",
+              "default": 10000,
+              "markdownDescription": "(default: `10000`)"
+            },
+            "DIAMOND": {
+              "type": "integer",
+              "default": 11000,
+              "markdownDescription": "(default: `11000`)"
+            }
+          },
+          "markdownDescription": "Starting CustomModelData value for newly assigned item IDs; cached IDs are unchanged. ALL is the default for every material; material names such as DIAMOND override it."
+        },
+        "contents_folders_priority": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": "vanilla",
+            "markdownDescription": "(default: `vanilla`)"
+          }
+        },
+        "merge_other_plugins_resourcepacks_folders": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "list": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": "ModelEngine/resource pack",
+                "markdownDescription": "(default: `ModelEngine/resource pack`)"
+              }
+            }
+          }
+        },
+        "ignore_files_ext": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": "db",
+            "markdownDescription": "(default: `db`)"
+          }
+        },
+        "ffmpeg": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "download": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "content_conversion": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "legacy_armor": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "append_equipment": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "full_conversion": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "(default: `false`)"
+                    },
+                    "material": {
+                      "type": "string",
+                      "default": "IRON",
+                      "markdownDescription": "(default: `IRON`)"
+                    }
+                  }
+                }
+              }
+            },
+            "furniture_to_item_display": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "auto_update_transformations": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "resource_to_graphics": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          },
+          "markdownDescription": "Converts content configuration files. Disabling does not undo prior conversions."
+        }
+      },
+      "markdownDescription": "Changes require /iazip and the updated pack on players' clients."
+    },
+    "pack_delivery": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "default": "d69238f2-b7ce-30b0-8262-17cd9490f29d",
+          "markdownDescription": "(default: `d69238f2-b7ce-30b0-8262-17cd9490f29d`)"
+        },
+        "delivery_mode": {
+          "type": "string",
+          "default": "per_client_version",
+          "enum": [
+            "universal",
+            "per_client_version"
+          ],
+          "markdownDescription": "(default: `per_client_version`) universal or per_client_version. Uses the existing universal ZIP."
+        },
+        "sound_packs": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Global override: false ignores all content pack_settings.sound_packs rules. Regenerate with /iazip after changing this setting."
+        },
+        "per_client_version": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "1_20_5_to_1_21_1": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "1_21_2_to_1_21_3": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "1_21_4": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "1_21_5": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "1_21_6_to_1_21_10": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "1_21_11": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "26_1": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "26_2": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "26_3": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Families follow ItemsAdder overlay boundaries. Created lazily; false uses universal. Unknown clients and hosting without derived-file publication also use universal."
+        },
+        "auto_apply": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "before_join": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "delay_ticks": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 0,
+              "markdownDescription": "(default: `1`) Used when applying the pack after joining."
+            }
+          },
+          "markdownDescription": "Controls automatic application both before and after joining."
+        },
+        "kick_player_on_decline": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "kick_player_on_fail": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "show_loading_title": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "protect_player": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "cancel_commands": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "cancel_teleport": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "movement": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "cancel_events": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "lock_using_entity": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`) Immobilizes the player using a client entity and hides them from other players."
+                }
+              }
+            }
+          },
+          "markdownDescription": "Attacks by and against protected players are always blocked while loading."
+        },
+        "command_cooldown_seconds": {
+          "type": "integer",
+          "default": 60,
+          "minimum": 0,
+          "markdownDescription": "(default: `60`)"
+        },
+        "allow_other_plugins_resourcepacks": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "notify_other_plugins_resourcepacks": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        }
+      },
+      "markdownDescription": "Reload with /iareload; changes apply to subsequent pack requests."
+    },
+    "registry_changes": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "action": {
+          "type": "string",
+          "default": "rejoin",
+          "enum": [
+            "rejoin",
+            "kick",
+            "none"
+          ],
+          "markdownDescription": "(default: `rejoin`)"
+        },
+        "rejoin": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "address": {
+              "type": "string",
+              "default": "auto",
+              "markdownDescription": "(default: `auto`)"
+            },
+            "port": {
+              "type": [
+                "integer",
+                "string"
+              ],
+              "default": "auto",
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                {
+                  "type": "string",
+                  "const": "auto"
+                }
+              ],
+              "markdownDescription": "(default: `auto`)"
+            }
+          }
+        }
+      },
+      "markdownDescription": "Server settings below use /iareload unless otherwise noted. rejoin, kick, none"
+    },
+    "blocks": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "worlds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": "*",
+            "markdownDescription": "(default: `*`)"
+          },
+          "markdownDescription": "Enable this block type in resource_pack.custom_blocks.entity."
+        },
+        "entity": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "fallback_vanilla_block": {
+              "type": "string",
+              "default": "GRAY_CONCRETE",
+              "markdownDescription": "(default: `GRAY_CONCRETE`)"
+            },
+            "max_blocks_per_chunk": {
+              "type": "integer",
+              "default": 256,
+              "minimum": 0,
+              "markdownDescription": "(default: `256`) 0 disables the placement limit."
+            },
+            "max_displays_per_player": {
+              "type": "integer",
+              "default": 512,
+              "markdownDescription": "(default: `512`)"
+            },
+            "render_radius_blocks": {
+              "type": "integer",
+              "default": 48,
+              "minimum": 1,
+              "markdownDescription": "(default: `48`)"
+            },
+            "update_interval_ticks": {
+              "type": "integer",
+              "default": 2,
+              "minimum": 1,
+              "markdownDescription": "(default: `2`)"
+            },
+            "warm_slot_timeout_ticks": {
+              "type": "integer",
+              "default": 40,
+              "minimum": 0,
+              "markdownDescription": "(default: `40`)"
+            }
+          }
+        },
+        "cancel_break_wrong_tool": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "send_actionbar": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "unregistered_blockstates": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "action": {
+              "type": "string",
+              "default": "restore_vanilla",
+              "enum": [
+                "restore_vanilla",
+                "register_as_custom",
+                "none"
+              ],
+              "markdownDescription": "(default: `restore_vanilla`)"
+            },
+            "only_new_chunks": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          },
+          "markdownDescription": "Handles blockstates reserved for custom blocks but missing an ItemsAdder registration. restore_vanilla, register_as_custom, none"
+        },
+        "fix_reverted_custom_blockstates": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Restores the expected blockstate of already registered custom blocks."
+        },
+        "fix_floating_blocks": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "fix_liquids_flow": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "remove_unused_palettes_on_region_save": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "(default: `false`)"
+        }
+      },
+      "markdownDescription": "Global custom block conversion, placement, liquid, palette and compatibility settings."
+    },
+    "items": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "fix_trades_guis_match_custom_items": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "itemsadder_trade_machines": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "vanilla_villagers": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "other_plugins": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Makes trade and GUI item matching aware of ItemsAdder custom item metadata."
+        },
+        "optimizations": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "kick_on_quickbar_spam": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "clicks": {
+                  "type": "integer",
+                  "default": 6,
+                  "markdownDescription": "(default: `6`)"
+                },
+                "window_ms": {
+                  "type": "integer",
+                  "default": 200,
+                  "markdownDescription": "(default: `200`)"
+                }
+              },
+              "markdownDescription": "Kicks players who spam quickbar or hotbar item interactions above the configured threshold."
+            }
+          },
+          "markdownDescription": "Performance and anti-spam settings for custom item interactions."
+        },
+        "auto_update": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`) Enable automatic updating for every custom item unless disabled in that item configuration."
+            },
+            "fix_unstackable_items_on_click": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`) Force merge clicked custom items that share the same namespace and id even when display data differs."
+            },
+            "enchantment_mode": {
+              "type": "string",
+              "default": "MERGE",
+              "enum": [
+                "MERGE",
+                "REPLACE"
+              ],
+              "markdownDescription": "(default: `MERGE`)"
+            }
+          },
+          "markdownDescription": "Globally controls automatic updates for custom items already present in inventories or the world. [Docs](https://itemsadder.devs.beer/plugin-usage/plugin-configuration/items-updater)"
+        },
+        "migrate_legacy_v3_durability": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`) Converts durability data from legacy ItemsAdder v3 items."
+        },
+        "fix_show_attack_and_damage_as_lore": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        }
+      },
+      "markdownDescription": "Global item behavior settings, including updater and legacy item conversion options."
+    },
+    "liquids": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        }
+      },
+      "markdownDescription": "Global feature toggle for ItemsAdder custom liquids."
+    },
+    "huds": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "force_color": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "color": {
+              "type": "string",
+              "default": "#FFFFFF",
+              "markdownDescription": "(default: `#FFFFFF`)"
+            }
+          },
+          "markdownDescription": "Forces a global text color for ItemsAdder HUD rendering."
+        }
+      },
+      "markdownDescription": "Global HUD feature settings. HUDs can also display ItemsAdder custom player stats."
+    },
+    "cooldown_bars": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "refresh_ticks": {
+          "type": "integer",
+          "default": 1,
+          "markdownDescription": "(default: `1`)"
+        },
+        "bossbar": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "color": {
+              "type": "string",
+              "default": "WHITE",
+              "enum": [
+                "PINK",
+                "BLUE",
+                "RED",
+                "GREEN",
+                "YELLOW",
+                "PURPLE",
+                "WHITE"
+              ],
+              "markdownDescription": "(default: `WHITE`) Bukkit bossbar color."
+            },
+            "style": {
+              "type": "string",
+              "default": "SOLID",
+              "enum": [
+                "SOLID",
+                "SEGMENTED_6",
+                "SEGMENTED_10",
+                "SEGMENTED_12",
+                "SEGMENTED_20"
+              ],
+              "markdownDescription": "(default: `SOLID`) Bukkit bossbar style."
+            }
+          },
+          "markdownDescription": "BossBar renderer settings for ItemsAdder cooldown bars."
+        }
+      },
+      "markdownDescription": "Global cooldown bar rendering options."
+    },
+    "loots": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "allow_loots_drop_from_spawners_using_silk_touch": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        }
+      },
+      "markdownDescription": "Global loot behavior settings for ItemsAdder custom drops."
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "advanced_enchantments": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enable_custom_enchants_in_items_configs": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          },
+          "markdownDescription": "AdvancedEnchantments compatibility for enchantments used by ItemsAdder custom items."
+        }
+      },
+      "markdownDescription": "Compatibility toggles for external plugins and legacy integrations."
+    },
+    "cache_font_images_and_effects_replacements": {
+      "type": "boolean",
+      "default": true,
+      "markdownDescription": "(default: `true`) Automatically disabled when InteractiveChat is installed."
+    },
+    "font_images": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "chat": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "add_hover_suggestion": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "tab_autocompletion": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Controls font image replacement and suggestions in chat."
+        },
+        "command": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "commandblocks": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "excluded": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": "home",
+                "markdownDescription": "(default: `home`)"
+              },
+              "markdownDescription": "Commands where ItemsAdder font image replacement is disabled."
+            }
+          },
+          "markdownDescription": "Controls font image replacement in commands and command blocks."
+        },
+        "customitem_name_and_lore": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Controls font image replacement in custom item names and lore."
+        },
+        "sign": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Controls font image replacement on signs."
+        },
+        "book": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Controls font image replacement in books."
+        },
+        "anvil": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Controls font image replacement in anvil rename text."
+        },
+        "iaimage_book": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "max_line_length": {
+              "type": "integer",
+              "default": 18,
+              "markdownDescription": "(default: `18`)"
+            },
+            "placeholder_font": {
+              "type": "string",
+              "default": "minecraft:default",
+              "markdownDescription": "(default: `minecraft:default`)"
+            }
+          }
+        },
+        "inventory_title": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "scoreboard_teams": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "update_every_ticks": {
+              "type": "integer",
+              "default": 3600,
+              "markdownDescription": "(default: `3600`)"
+            }
+          }
+        }
+      },
+      "markdownDescription": "Global support settings for ItemsAdder font images, glyphs, emojis, GUI glyphs and related placeholders. [Docs](https://itemsadder.devs.beer/adding-content/font-images)"
+    },
+    "text_effects": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "chat": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enables ItemsAdder text effects in chat messages. [Docs](https://itemsadder.devs.beer/plugin-usage/plugin-configuration/text-effects-1.17+)"
+        },
+        "customitem_name_and_lore": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enables ItemsAdder text effects in custom item names and lore."
+        },
+        "sign": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enables ItemsAdder text effects on signs."
+        },
+        "book": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enables ItemsAdder text effects in books."
+        },
+        "anvil": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enables ItemsAdder text effects in anvil rename text."
+        }
+      },
+      "markdownDescription": "Runtime channels reload with /iareload; enabling their resource_pack shader requires /iazip."
+    },
+    "scoreboard": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "hide_numbers": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "(default: `false`)"
+        }
+      },
+      "markdownDescription": "Runtime scoreboard handling reloads with /iareload."
+    },
+    "custom_entities": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "emotes": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "third_person_view": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "max_per_chunk": {
+          "type": "integer",
+          "default": 5,
+          "markdownDescription": "(default: `5`)"
+        },
+        "delay_packets": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "(default: `false`) Reduces packet traffic but may make animations less smooth."
+        },
+        "disguises_lag_compensation": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        }
+      },
+      "markdownDescription": "Runtime settings reload with /iareload; enabling their resource_pack content requires /iazip."
+    },
+    "entities": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "furniture": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "max_per_chunk": {
+              "type": "integer",
+              "default": 30,
+              "markdownDescription": "(default: `30`)"
+            }
+          },
+          "markdownDescription": "Global settings for ItemsAdder furniture entities and furniture placement behavior."
+        }
+      },
+      "markdownDescription": "Global limits and compatibility options for ItemsAdder custom entities, furniture and vehicles. [Docs](https://itemsadder.devs.beer/adding-content/entities)"
+    },
+    "crops": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "avg_seconds_per_stage": {
+          "type": "integer",
+          "default": 240,
+          "markdownDescription": "(default: `240`) Default average seconds for a crop to grow by one stage under optimal conditions."
+        },
+        "max_crops_in_area": {
+          "type": "integer",
+          "default": 1000,
+          "markdownDescription": "(default: `1000`) Maximum custom crops allowed in the configured area to limit performance cost."
+        },
+        "area_limit_blocks_radius": {
+          "type": "integer",
+          "default": 32,
+          "markdownDescription": "(default: `32`) Radius used by the crop area limit."
+        },
+        "interaction": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "precise_hitbox_targeting": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "continuous_harvesting_assistance": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`) Helps consecutive crop harvesting while holding the attack button."
+            }
+          },
+          "markdownDescription": "Improves selection of custom crop hitboxes over nearby vanilla blocks."
+        },
+        "rendering": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "tick_interval": {
+              "type": "integer",
+              "default": 2,
+              "markdownDescription": "(default: `2`)"
+            },
+            "max_shown_per_player": {
+              "type": "integer",
+              "default": 1400,
+              "markdownDescription": "(default: `1400`)"
+            },
+            "radius_blocks": {
+              "type": "integer",
+              "default": 32,
+              "markdownDescription": "(default: `32`)"
+            },
+            "billboard": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "distance": {
+                  "type": "integer",
+                  "default": 10,
+                  "markdownDescription": "(default: `10`)"
+                }
+              },
+              "markdownDescription": "Billboard rendering uses simpler far-away crop models for better client performance."
+            },
+            "fov_render_limit": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "checkerboard_pattern": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "distance": {
+                  "type": "integer",
+                  "default": 8,
+                  "markdownDescription": "(default: `8`)"
+                }
+              },
+              "markdownDescription": "Checkerboard rendering options for custom crops, used to reduce visual repetition and improve crop visibility."
+            }
+          },
+          "markdownDescription": "Performance-related rendering options for custom crops."
+        }
+      },
+      "markdownDescription": "Global defaults for custom crop growth and rendering. Custom crops require ItemsAdder 4.0.15+ and Minecraft 1.21.4+. [Docs](https://itemsadder.devs.beer/adding-content/crops)"
+    },
+    "recipes": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "crafting": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enable or disable ItemsAdder crafting table recipes."
+        },
+        "cooking": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enable or disable ItemsAdder furnace, smoker, campfire and blasting recipes."
+        },
+        "anvil": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enable or disable ItemsAdder anvil recipes."
+        },
+        "smithing": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          },
+          "markdownDescription": "Enable or disable ItemsAdder smithing recipes."
+        },
+        "custom_recipes": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "unlock": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "all_on_join": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "automatically": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                }
+              }
+            }
+          }
+        },
+        "remove_vanilla_recipes": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "list": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "DIAMOND_SWORD": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "IRON_INGOT": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            }
+          },
+          "markdownDescription": "Requires a server restart."
+        },
+        "fix_packet_too_large_kick": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "(default: `false`)"
+        },
+        "hide_vanilla_unrecognized_recipe_errors": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "no_permission_message": {
+          "type": "string",
+          "default": "recipebook",
+          "enum": [
+            "chat",
+            "recipebook",
+            "both",
+            "none"
+          ],
+          "markdownDescription": "(default: `recipebook`) chat, recipebook (result tooltip), both, none"
+        }
+      },
+      "markdownDescription": "Global recipe system settings for crafting, cooking, anvil, smithing, recipe book unlocks and vanilla recipe removal. [Docs](https://itemsadder.devs.beer/adding-content/recipes)"
+    },
+    "player_stats": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "save_type": {
+          "type": "string",
+          "default": "CUSTOM_NBT",
+          "enum": [
+            "CUSTOM_NBT",
+            "PLAYER_DAT"
+          ],
+          "markdownDescription": "(default: `CUSTOM_NBT`) CUSTOM_NBT, PLAYER_DAT"
+        }
+      },
+      "markdownDescription": "Custom player stats added by ItemsAdder. They can be read by commands, PlaceholderAPI, and HUDs. [Docs](https://itemsadder.devs.beer/other/custom-player-stats)"
+    },
+    "logging": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "(default: `true`)"
+        },
+        "config_files": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "reloading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "legacy_empty_files": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "benchmark": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_ms": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "items": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "attribute_modifiers_loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loaded": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "custom_model_data": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_disabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "warnings": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "graphics": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "armors": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "generation": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "font_images": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "detected": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "huds": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_disabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "triggers": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "loots": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_disabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "liquids": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "sounds": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_disabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "entities": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "bones_spawning": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "entity_populators": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_disabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "categories": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "missing_items": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "icon_failed_load": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "single_loaded": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "single_loaded_overwrite": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "single_skip": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "total_loaded": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "file_loaded": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "recipes": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "fix_packet_too_large": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "crafting": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "cooking": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "smithing": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "anvil": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "removed_vanilla": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "scripts": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_empty": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "loading_disabled": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "compilation": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "execution": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            }
+          }
+        },
+        "translations": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "dictionaries_loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "minecraft_lang_overwrite_loading": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "resource_packs": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "compression": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "duplicate_textures": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "files": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "overlays": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "non_standard_rotations": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "player_install": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "world_generation": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "blocks_populators": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "generation": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_no_populators": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "cave_decorators": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "generation": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_no_decorators": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "surface_decorators": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "generation": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_no_decorators": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            },
+            "trees_populators": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true,
+                  "markdownDescription": "(default: `true`)"
+                },
+                "generation": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_disabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "loading_no_populators": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                }
+              }
+            }
+          }
+        },
+        "blocks": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "save_load": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false,
+                  "markdownDescription": "(default: `false`)"
+                },
+                "min_ms": {
+                  "type": "integer",
+                  "default": 0,
+                  "markdownDescription": "(default: `0`)"
+                }
+              }
+            },
+            "convert_vanilla_blocks": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "fix_bugged_blocks": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "unknown_block_break": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            },
+            "unusual_block_break": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        },
+        "player_stats": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "markdownDescription": "(default: `true`)"
+            },
+            "save": {
+              "type": "boolean",
+              "default": false,
+              "markdownDescription": "(default: `false`)"
+            }
+          }
+        }
+      },
+      "markdownDescription": "Master switch for the configurable diagnostic messages below. Reload with /iareload. Disabling a group preserves its nested preferences."
+    }
+  }
+}

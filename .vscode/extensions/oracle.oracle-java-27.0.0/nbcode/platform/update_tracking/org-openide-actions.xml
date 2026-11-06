@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="org.openide.actions">
+    <module_version install_time="1789551689397" last="true" origin="installer" specification_version="6.72">
+        <file crc="3556488737" name="config/Modules/org-openide-actions.xml"/>
+        <file crc="1351275704" name="modules/org-openide-actions.jar"/>
+    </module_version>
+</module>

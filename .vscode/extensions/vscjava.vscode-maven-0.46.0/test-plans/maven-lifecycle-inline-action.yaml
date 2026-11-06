@@ -1,0 +1,87 @@
+# Test Plan: Maven Explorer Lifecycle Inline Action
+#
+# Verifies that clicking the Maven Explorer Run action for a lifecycle phase
+# executes that exact phase directly.
+#
+# Usage: npx autotest run test-plans/maven-lifecycle-inline-action.yaml
+
+name: "vscode-maven — Lifecycle Inline Action"
+description: |
+  Opens a minimal Maven project, expands Maven Explorer lifecycle nodes, clicks
+  the Run inline action for `compile`, and verifies that Maven produced the
+  compiled class file.
+
+setup:
+  extension: "vscjava.vscode-maven"
+  extensions:
+    - "redhat.java"
+  extensionPath: "../../vscode-maven"
+  workspace: "../test/projects/lifecycle-compile"
+  vscodeVersion: "stable"
+  timeout: 120
+
+steps:
+  - id: "wait-java-ls"
+    action: "waitForLanguageServer"
+    # No `verify:` — `waitForLanguageServer` is self-asserting; see
+    # archetype plan for rationale.
+    timeout: 120
+
+  - id: "focus-maven-view"
+    action: "executeVSCodeCommand mavenProjects.focus"
+    verify: "Maven Projects panel is visible in the Explorer"
+    timeout: 10
+
+  - id: "collapse-workspace-root"
+    action: "collapseWorkspaceRoot"
+    # No `verify:` — cosmetic UI prep. The section may already be
+    # collapsed (then the command is a no-op), so there is no reliable
+    # visual signal for the LLM to judge.
+
+  - id: "collapse-outline"
+    action: "collapseSidebarSection OUTLINE"
+    # No `verify:` — same reason as above.
+
+  - id: "collapse-timeline"
+    action: "collapseSidebarSection TIMELINE"
+    # No `verify:` — same reason as above.
+
+  - id: "collapse-java-projects"
+    action: "collapseSidebarSection JAVA PROJECTS"
+    # No `verify:` — same reason as above.
+
+  - id: "refresh-projects"
+    action: "executeVSCodeCommand maven.explorer.refresh"
+    # No `verify:` — refreshing an unchanged tree produces no visible
+    # delta (the spinner is faster than the screenshot). The Maven tree
+    # is sanity-checked by the subsequent `expandTreeItem` steps which
+    # would fail with `verifyTreeItem` if the refresh broke the tree.
+    timeout: 10
+
+  - id: "settle"
+    action: "wait 3 seconds"
+    # No `verify:` — passive settle; no visible change expected.
+
+  - id: "expand-project"
+    action: "expandTreeItem lifecycle-compile"
+    verifyTreeItem:
+      name: "Lifecycle"
+      exact: true
+    timeout: 30
+
+  - id: "expand-lifecycle"
+    action: "expandTreeItem Lifecycle"
+    verifyTreeItem:
+      name: "compile"
+      exact: true
+    timeout: 15
+
+  - id: "run-compile-inline-action"
+    action: "clickTreeItemAction compile Run"
+    verify: "Clicking the inline Run icon opens a Terminal panel at the bottom — the panel may still be loading mvn (mvn output arrives asynchronously and is asserted in the next step by file-existence)."
+    timeout: 30
+
+  - id: "verify-compile-output"
+    action: "wait 8 seconds"
+    verifyFile:
+      path: "~/target/classes/com/microsoft/vscode/maven/test/App.class"

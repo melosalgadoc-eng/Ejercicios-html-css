@@ -1,0 +1,18 @@
+{
+    "telemetryRetryConfig": {
+        "maxRetries": 6,
+        "baseCapacity": 256,
+        "baseTimer": "60000",
+        "maxDelayMs": "600000",
+        "backoffFactor": 2,
+        "jitterFactor": 0.25
+    },
+    "telemetryApi": {
+        "baseUrl": "https://javavscetel.ocs.oraclecloud.com",
+        "baseEndpoint": "/vscode/java/sendTelemetry",
+        "version": "/v1"
+    },
+    "metadata": {
+        "consentSchemaVersion": "v1"
+    }
+}

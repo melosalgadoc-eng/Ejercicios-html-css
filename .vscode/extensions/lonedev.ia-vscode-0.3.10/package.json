@@ -1,0 +1,203 @@
+{
+	"name": "ia-vscode",
+	"displayName": "ia-vscode",
+	"description": "ItemsAdder vscode extension",
+	"version": "0.3.10",
+	"publisher": "LoneDev",
+	"icon": "images/ia-logo.png",
+	"bugs": {
+		"url": "https://github.com/ItemsAdder/ia-vscode/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ItemsAdder/ia-vscode.git"
+	},
+	"engines": {
+		"vscode": "^1.67.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./out/extension.js",
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./ && node scripts/copy-runtime-assets.js",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js",
+		"update-schema-enums": "node scripts/update-schema-enums.js",
+		"update-itemsadder-config-schema": "node scripts/update-itemsadder-config-schema.js",
+		"package": "vsce package",
+		"publish": "vsce publish"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.1",
+		"@types/node": "14.x",
+		"@types/unzipper": "^0.10.11",
+		"@types/vscode": "^1.67.0",
+		"@typescript-eslint/eslint-plugin": "^5.21.0",
+		"@typescript-eslint/parser": "^5.21.0",
+		"@vscode/test-electron": "^2.1.3",
+		"@vscode/vsce": "^3.9.2",
+		"eslint": "^8.14.0",
+		"glob": "^8.0.1",
+		"mocha": "^9.2.2"
+	},
+	"dependencies": {
+		"java-parser": "^2.3.3",
+		"typescript": "^4.9.5",
+		"unzipper": "^0.12.3",
+		"yaml": "^2.7.0"
+	},
+	"activationEvents": [
+		"onLanguage:yaml",
+		"onLanguage:jspp",
+		"onLanguage:java"
+	],
+	"extensionDependencies": [
+		"redhat.vscode-yaml"
+	],
+	"contributes": {
+		"configuration": {
+			"title": "IA VS Code Extension",
+			"properties": {
+				"ia-vscode.neverWarnAboutCopilot": {
+					"type": "boolean",
+					"default": false,
+					"description": "Disables warnings about GitHub Copilot in this extension."
+				},
+				"ia-vscode.devMode": {
+					"type": "boolean",
+					"default": false,
+					"description": "Enables dev mode for the extension."
+				},
+				"ia-vscode.enableDecorations": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables ItemsAdder editor decorations such as icons, colored text previews, disabled block backgrounds and recipe markers."
+				},
+				"ia-vscode.enableDiagnostics": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables ItemsAdder custom diagnostics in YAML files."
+				},
+				"ia-vscode.enableIndexing": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables workspace indexing for ItemsAdder custom items, blocks, sounds, textures, models, scripts and related autocomplete."
+				},
+				"ia-vscode.enableCustomReferenceAutocomplete": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables autocomplete for indexed ItemsAdder custom references such as custom items, blocks, sounds, textures, models, scripts and font images."
+				},
+				"ia-vscode.enableImplicitNamespaceHints": {
+					"type": "boolean",
+					"default": true,
+					"description": "Shows the implicit namespace hint before references that omit a namespace."
+				},
+				"ia-vscode.enableTextPreviews": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables rendered previews for Minecraft legacy color codes, MiniMessage text and dictionary translations."
+				},
+				"ia-vscode.enableHoverProviders": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables ItemsAdder hover popups for schema documentation, assets, scripts and indexed custom references."
+				},
+				"ia-vscode.enableSoundTools": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enables ItemsAdder sound hover, codelens and play/stop helpers."
+				},
+				"ia-vscode.enableAutoSuggestionsOnEmptyLine": {
+					"type": "boolean",
+					"default": true,
+					"description": "Automatically opens suggestions when moving to another YAML line in ItemsAdder files."
+				},
+				"ia-vscode.enableStatusBar": {
+					"type": "boolean",
+					"default": true,
+					"description": "Shows the ItemsAdder status bar menu item."
+				}
+			}
+		},
+		"languages": [
+			{
+				"id": "jspp",
+				"aliases": [
+					"jspp"
+				],
+				"extensions": [
+					".jspp"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "jspp",
+				"scopeName": "source.jspp",
+				"path": "./syntaxes/jspp.tmLanguage.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "ia-vscode.outdentWithoutAcceptingSuggestion",
+				"title": "ItemsAdder: Outdent Without Accepting Suggestion"
+			},
+			{
+				"command": "ia-vscode.playSound",
+				"title": "ItemsAdder: Play Sound"
+			},
+			{
+				"command": "ia-vscode.stopSound",
+				"title": "ItemsAdder: Stop Sound"
+			},
+			{
+				"command": "ia-vscode.openAssetSource",
+				"title": "ItemsAdder: Open Asset Source"
+			},
+			{
+				"command": "ia-vscode.openUrlInVscode",
+				"title": "ItemsAdder: Open URL in VS Code"
+			},
+			{
+				"command": "ia-vscode.configureJavaScriptSupport",
+				"title": "ItemsAdder: Configure Java Script Support"
+			},
+			{
+				"command": "ia-vscode.cleanJavaLanguageServerWorkspace",
+				"title": "ItemsAdder: Clean Java Language Server Workspace"
+			}
+		],
+		"keybindings": [
+			{
+				"key": "shift+tab",
+				"command": "ia-vscode.outdentWithoutAcceptingSuggestion",
+				"when": "editorTextFocus && suggestWidgetVisible && ia-vscode.itemsAdderResourceConfig"
+			},
+			{
+				"key": "tab",
+				"command": "tab",
+				"when": "editorTextFocus && suggestWidgetVisible && !suggestWidgetHasFocusedSuggestion && ia-vscode.itemsAdderResourceConfig"
+			},
+			{
+				"key": "space",
+				"command": "type",
+				"args": {
+					"text": " "
+				},
+				"when": "editorTextFocus && suggestWidgetVisible && !suggestWidgetHasFocusedSuggestion && ia-vscode.itemsAdderResourceConfig"
+			}
+		]
+	},
+	"__metadata": {
+		"installedTimestamp": 1789673197561,
+		"targetPlatform": "undefined",
+		"size": 69426519
+	}
+}

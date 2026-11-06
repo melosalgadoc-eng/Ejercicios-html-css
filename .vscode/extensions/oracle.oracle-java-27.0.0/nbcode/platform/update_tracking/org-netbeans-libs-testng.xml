@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="org.netbeans.libs.testng/1">
+    <module_version install_time="1789551701751" last="true" origin="installer" specification_version="1.47">
+        <file crc="1204579547" name="config/Modules/org-netbeans-libs-testng.xml"/>
+        <file crc="2201776354" name="docs/testng-7.11.0-javadoc.jar"/>
+        <file crc="3429300586" name="modules/ext/jcommander-1.85.jar"/>
+        <file crc="4078191392" name="modules/ext/slf4j-api-2.0.17.jar"/>
+        <file crc="4038594560" name="modules/ext/testng-7.11.0.jar"/>
+        <file crc="3257346737" name="modules/ext/testng-ant-1.0.0.jar"/>
+        <file crc="519323495" name="modules/org-netbeans-libs-testng.jar"/>
+    </module_version>
+</module>

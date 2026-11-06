@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="org.netbeans.modules.nbcode.java.lsp.server.telemetry">
+    <module_version install_time="1789551954497" last="true" origin="installer" specification_version="1.0.1.3.1">
+        <file crc="3094951023" name="config/Modules/org-netbeans-modules-nbcode-java-lsp-server-telemetry.xml"/>
+        <file crc="1382664891" name="modules/org-netbeans-modules-nbcode-java-lsp-server-telemetry.jar"/>
+    </module_version>
+</module>

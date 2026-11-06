@@ -1,0 +1,128 @@
+# Java No-Config Debug
+
+This feature enables configuration-less debugging for Java applications, similar to the JavaScript Debug Terminal in VS Code.
+
+## How It Works
+
+When you open a terminal in VS Code with this extension installed, the following environment variables are automatically set:
+
+- `VSCODE_JDWP_ADAPTER_ENDPOINTS`: Path to a communication file for port exchange
+- `PATH`: Includes the `debugjava` command wrapper
+
+Note: `JAVA_TOOL_OPTIONS` is NOT set globally to avoid affecting other Java tools (javac, maven, gradle). Instead, it's set only when you run the `debugjava` command.
+
+Terminal setup does not activate or wait for Language Support for Java. Opening the debug configuration picker in a non-Java workspace therefore does not start Java just to discover its executable. If Java support is already active, its tooling JDK is contributed as `VSCODE_JAVA_EXEC`; otherwise, the integration observes activation in the background and adds it when available. Observation stops after activation or when the integration is disposed.
+
+The wrapper keeps its selection order: `JAVA_HOME`, then `VSCODE_JAVA_EXEC`, then `java` on `PATH`. An existing cached `VSCODE_JAVA_EXEC` is retained while Java support is unavailable. Terminals created before Java executable discovery must be recreated to receive the new value. Actual Java launch/attach still requires Java support and may activate it.
+
+## Disabling No-Config Debug
+
+No-Config Debug is enabled by default. To opt out for all workspaces or just the current workspace, add this to the corresponding VS Code settings:
+
+```json
+"java.debug.settings.enableNoConfigDebug": false
+```
+
+Reload VS Code and recreate existing terminals after changing this setting. The value is read once during extension activation; there is no live enable/disable switch. Existing terminal processes retain their old environment until they are recreated.
+
+When disabled, the extension skips endpoint storage, file watching, Java executable detection, and wrapper permission setup, and removes this feature's cached terminal environment contributions. It does not clear the user's PATH or delete endpoint files as part of opting out. Standard Java launch/attach debugging, F5, and Run/Debug CodeLens are unaffected.
+
+The AI `debug_java_application` tool requires this integration. When disabled, it returns instructions to enable the setting instead of building, launching a terminal, or stopping an existing debug session. Other AI tools for existing debug sessions remain available.
+
+## Usage
+
+### Basic Usage
+
+Instead of running:
+```bash
+java -cp . com.example.Main
+```
+
+Simply run:
+```bash
+debugjava -cp . com.example.Main
+```
+
+The debugger will automatically attach, and breakpoints will work without any launch.json configuration!
+
+### Maven Projects
+
+```bash
+debugjava -jar target/myapp.jar
+```
+
+### Gradle Projects
+
+```bash
+debugjava -jar build/libs/myapp.jar
+```
+
+### With Arguments
+
+```bash
+debugjava -cp . com.example.Main arg1 arg2 --flag=value
+```
+
+### Spring Boot
+
+```bash
+debugjava -jar myapp.jar --spring.profiles.active=dev
+```
+
+## Advantages
+
+1. **No Configuration Required**: No need to create or maintain launch.json
+2. **Rapid Prototyping**: Perfect for quick debugging sessions
+3. **Script Debugging**: Debug applications launched by complex shell scripts
+4. **Environment Consistency**: Inherits all terminal environment variables
+5. **Parameter Flexibility**: Easy to change arguments using terminal history (↑ key)
+
+## How It Works Internally
+
+1. When you run `debugjava`, the wrapper script temporarily sets `JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=0`
+2. The wrapper determines which Java executable to use (priority order):
+   - First: `JAVA_HOME/bin/java` if JAVA_HOME environment variable is set (user's explicit choice)
+   - Second: `VSCODE_JAVA_EXEC` environment variable (Java path from VS Code's Java Language Server)
+   - Third: `java` command from system PATH
+3. The wrapper launches the Java process with JDWP enabled
+4. JVM starts and outputs: "Listening for transport dt_socket at address: 12345"
+5. The wrapper captures the JDWP port from this output
+6. The port is written to a communication file
+7. VS Code's file watcher detects the file and automatically starts an attach debug session
+
+The communication file is stored in the extension's workspace-specific VS Code storage directory, not its installation directory. It contains only the local debug host and port, is deleted after a successful attach, and any stale file is removed before the next registration. Its path remains stable across window reloads.
+
+## Troubleshooting
+
+### No-Config Debug Could Not Be Initialized
+
+If the workspace storage directory or its file watcher cannot be initialized, the extension displays a warning and leaves standard Java launch/attach debugging available. No-Config Debug requires an open workspace and writable VS Code workspace storage.
+
+After upgrading from a version that stored the communication file in the extension directory, recreate existing terminals to pick up the new endpoint path.
+
+### Port Already in Use
+
+If you see "Address already in use", another Java debug session is running. Terminate it first.
+
+### No Breakpoints Hit
+
+1. Ensure you're running with `debugjava` command (not plain `java`)
+2. Check that the `debugjava` command is available: `which debugjava` (Unix) or `Get-Command debugjava` (PowerShell)
+3. Verify the terminal was opened AFTER the extension activated
+4. Check the Debug Console for error messages
+
+### Node.js Not Found
+
+The wrapper script requires Node.js to be installed and available in PATH.
+
+## Limitations
+
+- Requires Node.js to be installed and available in PATH
+- Only works in terminals opened within VS Code
+- Requires using the `debugjava` command instead of `java`
+- The Java process will suspend (hang) until the debugger attaches
+
+## See Also
+
+- [Debugger for Java Documentation](https://github.com/microsoft/vscode-java-debug)
+- [JDWP Documentation](https://docs.oracle.com/javase/8/docs/technotes/guides/jpda/jdwp-spec.html)

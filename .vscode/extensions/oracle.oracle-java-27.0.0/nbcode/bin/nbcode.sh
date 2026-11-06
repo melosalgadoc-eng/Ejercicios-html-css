@@ -1,0 +1,184 @@
+#!/bin/sh
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+#
+# resolve symlinks
+#
+
+PRG=$0
+
+while [ -h "$PRG" ]; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '^.*-> \(.*\)$' 2>/dev/null`
+    if expr "$link" : '^/' 2> /dev/null >/dev/null; then
+	PRG="$link"
+    else
+	PRG="`dirname "$PRG"`/$link"
+    fi
+done
+
+progdir=`dirname "$PRG"`
+old=`pwd`
+cd "$progdir"/..
+basedir=`pwd`
+cd "$old"
+
+APPNAME=`basename "$PRG" ".sh"`
+if [ -z "$APP_DOCK_NAME" ] ; then
+  APP_DOCK_NAME="$APPNAME"
+fi
+
+case "`uname -s -m`" in
+    Darwin*)
+        # set default userdir and cachedir on Mac OS X
+        DEFAULT_USERDIR_ROOT="${HOME}/Library/Application Support/NetBeans/${APPNAME}"
+        DEFAULT_CACHEDIR_ROOT="${HOME}/Library/Caches/NetBeans/${APPNAME}"
+        ;;
+    CYGWIN*_64)
+        exec "$progdir/${APPNAME}64.exe" "$@"
+        ;;
+    CYGWIN*)
+        exec "$progdir/${APPNAME}.exe" "$@"
+        ;;
+    *)
+        # set default userdir and cachedir on unix systems
+        DEFAULT_USERDIR_ROOT="${HOME}/.netbeans/${APPNAME}"
+        DEFAULT_CACHEDIR_ROOT="${HOME}/.cache/netbeans/${APPNAME}"
+        ;;
+esac
+
+absolutize_paths() {
+    while read path; do
+        if [ -d "$path" ]; then
+            (cd "$path" 2>/dev/null && pwd)
+        else
+            echo "$path"
+        fi
+    done
+}
+
+BASEDIR="$basedir"
+
+if [ -f "$basedir/etc/$APPNAME".conf ] ; then
+    . "$basedir/etc/$APPNAME".conf
+fi
+
+export DEFAULT_USERDIR_ROOT
+
+# #68373: look for userdir, but do not modify "$@"
+userdir="${default_userdir}"
+
+cachedir="${default_cachedir}"
+
+founduserdir=""
+for opt in "$@"; do
+    if [ "${founduserdir}" = "yes" ]; then
+        userdir="$opt"
+        break
+    elif [ "$opt" = "--userdir" ]; then
+        founduserdir="yes"
+    fi
+done
+foundcachedir=""
+for opt in "$@"; do
+    if [ "${foundcachedir}" = "yes" ]; then
+        cachedir="$opt"
+        break
+    elif [ "$opt" = "--cachedir" ]; then
+        foundcachedir="yes"
+    fi
+done
+
+if [ -f "${userdir}/etc/$APPNAME".conf ] ; then
+    . "${userdir}/etc/$APPNAME".conf
+fi
+
+## Removed irrelevant jdkhome reassignment relative to app dir, i.e.,
+    # #74333: permit jdkhome to be defined as relative to app dir
+
+if [ ! -f "$basedir/etc/$APPNAME".clusters ]; then
+    echo Cannot read cluster file: "$basedir/etc/$APPNAME".clusters 1>&2
+    exit 1
+fi
+
+readClusters() {
+    if [ -x /usr/ucb/echo ]; then
+      echo=/usr/ucb/echo
+    else
+      echo=echo
+    fi
+    grep -v "^#" "$basedir/etc/$APPNAME".clusters | grep -v "^$" | grep -v platform | while read X; do
+        if expr "$X" : "/.*" >/dev/null; then
+            $echo "$X"
+        else
+            $echo "$basedir/$X"
+        fi
+    done
+}
+
+clusters="`readClusters | absolutize_paths | tr '\012' ':'`"
+
+if [ ! -z "$extra_clusters" ] ; then
+    clusters="$clusters:$extra_clusters"
+fi
+
+launchNbexec() {
+    nbexec=`grep -v "^#" "$basedir/etc/$APPNAME".clusters | grep -v "^$" | grep platform | while read X; do
+        if expr "$X" : "/.*" >/dev/null; then
+           echo "$X/lib/nbexec.sh"
+        elif [ -f "$basedir/$X/lib/nbexec.sh" ]; then
+            echo "$basedir/$X/lib/nbexec.sh"
+        fi
+    done | head -n 1`
+    sh=sh
+    # #73162: Ubuntu uses the ancient Bourne shell, which does not implement trap well.
+    if [ -x /bin/bash ]
+    then
+        sh=/bin/bash
+    fi
+    if [ "${founduserdir}" = "yes" ]; then
+        exec $sh "$nbexec" "$@"
+    else
+        if [ "${foundcachedir}" = "yes" ]; then
+            exec $sh "$nbexec" --userdir "${userdir}" "$@"
+        else
+            exec $sh "$nbexec" --userdir "${userdir}" --cachedir "${cachedir}" "$@"
+        fi
+    fi
+}
+
+case "`uname`" in
+    Darwin*)
+        eval launchNbexec \
+            --jdkhome '"$jdkhome"' \
+            '-J-Xdock:name="$APP_DOCK_NAME"' \
+            '-J-Xdock:icon="$basedir/$APPNAME/$APPNAME.icns"' \
+            --branding '"$APPNAME"' \
+            --clusters '"$clusters"' \
+            ${default_options} \
+            '"$@"'
+        ;;
+    *)
+       eval launchNbexec \
+            --jdkhome '"$jdkhome"' \
+            --branding '"$APPNAME"' \
+            --clusters '"$clusters"' \
+            ${default_options} \
+            '"$@"'
+        ;;
+esac
