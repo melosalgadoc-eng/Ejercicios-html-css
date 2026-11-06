@@ -1,0 +1,60 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    width: 90%;
+    margin: 50px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 150px;
+    height: 90px;
+    object-fit: contain;
+}
+
+
+.enlaces {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+}
+
+.enlaces a {
+    text-decoration: none;
+    color: #888888;
+    font-family: "Times New Roman", serif;
+    font-size: 16px;
+}
+
+
+.idiomas {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.idiomas a {
+    width: 49px;
+    height: 49px;
+    background-color: #929292;
+    color: white;
+    text-decoration: none;
+    font-family: "Times New Roman", serif;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,37 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.menu {
+    width: 520px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: Arial, sans-serif;
+}
+
+.elemento {
+    background-color: #dddddd;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 73px;
+}
+
+.elemento p {
+    font-size: 20px;
+    color: black;
+}
+
+.elemento a {
+    background-color: white;
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 5px 8px;
+}
